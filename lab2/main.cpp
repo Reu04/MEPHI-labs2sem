@@ -12,6 +12,8 @@
 #include <vector>
 #include <algorithm>
 #include <cstdlib>
+#include <list>
+#include "functional"
 
 #include "ArraySequence.h"
 #include "LinkedListSequence.h"
@@ -19,6 +21,14 @@
 #include "UserInterface.h"
 #include "UIforBaseCollections.h"
 
+
+bool BasicComparatorForInt(const int& a, const int& b) {
+    return a < b;
+}
+
+bool ReverseComparatorForInt(const int& a, const int& b) {
+    return a >= b;
+}
 
 void TestDynamicArray() {
     std::cout << "\n\tTest Dynamic Array:\t\n";
@@ -90,6 +100,22 @@ void TestDynamicArray() {
         delete[] arr;
     }
 
+    // MergeSort:
+    Object1.MergeSort(Object1, &BasicComparatorForInt);
+    Object4.MergeSort(Object4, &ReverseComparatorForInt);
+
+    std::cout << "\nData after MergeSort:\n";
+    Object1.Print(std::cout);
+    Object4.Print(std::cout);
+
+    // QuickSort:
+    Object1.QuickSort(Object1, 0, Object1.GetSize() - 1, &ReverseComparatorForInt);
+    Object4.QuickSort(Object4, 0, Object4.GetSize() - 1, &BasicComparatorForInt);
+
+    std::cout << "\nData after QuickSort:\n";
+    Object1.Print(std::cout);
+    Object4.Print(std::cout);
+
     delete[] arr1;
     delete[] arr2;
     delete[] arr3;
@@ -105,8 +131,8 @@ void TestLinkedList() {
 
     //// Constructor:
     LinkedList<int> Object1(arr1, size1);
-    LinkedList<std::string>* Object2 = new LinkedList<std::string>(arr2, size2);
-    LinkedList<double>* Object3 = new LinkedList<double>(arr3, size3);
+    auto* Object2 = new LinkedList<std::string>(arr2, size2);
+    auto* Object3 = new LinkedList<double>(arr3, size3);
 
     //// Copy constructor:
     LinkedList<int> Object5(Object1);
@@ -171,7 +197,6 @@ void TestLinkedList() {
         delete list2test;
         delete list3test;
     }
-
     //// Append, Prepend, InsertAt:
     Object1.Append(100);
     Object2->Append("Tagir");
@@ -235,6 +260,24 @@ void TestLinkedList() {
 
         delete res1;
         delete res2;
+    }
+
+    {
+        // MergeSort:
+        std::cout << "\nData for test MergeSort function:\n";
+
+        LinkedList<int> list1 = LinkedList<int>(new int[]{4, 7, 2, 1, 8, 9, 3, 6, 5}, 9);
+        LinkedList<int> list2 = LinkedList<int>(new int[]{33, 0, -1, -100, 67, 51, 105}, 6);
+
+        list1.Print(std::cout);
+        list2.Print(std::cout);
+
+        list1.MergeSort(list1, &BasicComparatorForInt);
+        list2.MergeSort(list2, &ReverseComparatorForInt);
+
+        std::cout << "\nData after MergeSort:\n";
+        list1.Print(std::cout);
+        list2.Print(std::cout);
     }
 
     delete[] arr1;
@@ -386,6 +429,8 @@ void TestArraySequence() {
         delete res2;
     }
 
+    // TODO test for MergeSort for Seq = new ArraySeq
+
     delete Object2;
     delete Object3;
 }
@@ -395,8 +440,8 @@ void TestLinkedListSequence() {
 
     //// Constructor:
     LinkedListSequence<int> Object1(new int[]{1, 2, 3, 4}, 4);
-    LinkedListSequence<char>* Object2 = new LinkedListSequence<char>(new char[]{'R', 'e', 'n', 'a', 't', 'a'}, 6);
-    LinkedListSequence<double>* Object3 = new LinkedListSequence<double>(new double[]{0, 1.1, 2.2}, 3);
+    auto* Object2 = new LinkedListSequence<char>(new char[]{'R', 'e', 'n', 'a', 't', 'a'}, 6);
+    auto* Object3 = new LinkedListSequence<double>(new double[]{0, 1.1, 2.2}, 3);
 
     //// Copy constructor:
     LinkedListSequence<int> Object5(Object1);
@@ -1047,23 +1092,23 @@ void TestDeque() {
 }
 
 int main() {
-//    TestDynamicArray();
+    TestDynamicArray();
 //    TestLinkedList();
 //    TestArraySequence();
 //    TestLinkedListSequence();
 //
-    TestDeque();
+//    TestDeque();
 
-    {
-        std::cout << "If you want to create a Sequence object, enter 1, otherwise 2: " << std::endl;
-        int choice;
-        std::cin >> choice;
-        if (choice == 1) {
-            UserInterface();
-        } else {
-            UIforBaseCollections();
-        }
-    }
+//    {
+//        std::cout << "\nIf you want to create a Sequence object, enter 1, otherwise 2: " << std::endl;
+//        int choice;
+//        std::cin >> choice;
+//        if (choice == 1) {
+//            UserInterface();
+//        } else {
+//            UIforBaseCollections();
+//        }
+//    }
 
     return 0;
 }

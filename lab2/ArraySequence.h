@@ -37,6 +37,8 @@ public:
     void InsertAt(T item, int index) override;
     Sequence<T>* Concat(Sequence<T>* other) override;
 
+    //void Sort(Sequence<T>* seq, bool (*comp)(const T&, const T&)) override;
+
     void Print(std::ostream& buff) const override;
 
     ~ArraySequence();

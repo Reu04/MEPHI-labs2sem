@@ -122,7 +122,7 @@ void ArraySequence<T>::InsertAt(T item, int index) {
 
 template<typename T>
 Sequence<T>* ArraySequence<T>::Concat(Sequence<T>* other) {
-    ArraySequence<T>* temp = new ArraySequence<T>(*dynamic_cast<ArraySequence<T>*>(other));
+    auto* temp = new ArraySequence<T>(*dynamic_cast<ArraySequence<T>*>(other));
     T* arr = new T[GetLength() + temp->GetLength()];
     size_t size = GetLength() + temp->GetLength();
     for (size_t i = 0; i < GetLength(); i++) {
@@ -132,10 +132,19 @@ Sequence<T>* ArraySequence<T>::Concat(Sequence<T>* other) {
         arr[GetLength() + i] = temp->object->Get(i);
     }
 
-    ArraySequence<T>* res = new ArraySequence<T>(arr, size);
+    auto* res = new ArraySequence<T>(arr, size);
     delete temp;
     return res;
 }
+
+///////////
+
+//template<typename T>
+//void ArraySequence<T>::Sort(Sequence<T>* seq, bool (*comp)(const T&, const T&)) {
+//    auto* tempSeq = new ArraySequence<T>(*dynamic_cast<ArraySequence<T>*>(seq));
+//    DynamicArray<T> tempArr = *tempSeq->object;
+//    tempArr.MergeSort(tempArr, comp);
+//}
 
 //////////
 

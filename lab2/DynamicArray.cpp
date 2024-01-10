@@ -32,7 +32,32 @@ DynamicArray<T>::DynamicArray(DynamicArray &&other) : size_(other.size_), ptr_(o
     other.ptr_ = nullptr;
 }
 
+template<typename T>
+DynamicArray<T>::DynamicArray(Iterator lhs, Iterator rhs) : size_(rhs - lhs) {
+    ptr_ = new T[size_];
+    for (int i = 0; i < size_; i++) {
+        ptr_[i] = *(lhs++);
+    }
+}
+
 //////////
+
+template<typename T>
+typename DynamicArray<T>::Iterator DynamicArray<T>::begin() const {
+    return Iterator(ptr_);
+}
+
+template<typename T>
+typename DynamicArray<T>::Iterator DynamicArray<T>::end() const {
+    return Iterator(ptr_ + size_);
+}
+
+template<typename T>
+void DynamicArray<T>::Clear() {
+    delete[] ptr_;
+    ptr_ = nullptr;
+    size_ = 0;
+}
 
 template<typename T>
 T DynamicArray<T>::Get(int index) const {
@@ -78,7 +103,7 @@ void DynamicArray<T>::Set(int index, T value) {
         throw std::runtime_error("IndexOutOfRange");
     } else if (index < (int) size_) {
         ptr_[index] = value;
-    } else {
+    } else { // if == size_
         Resize(size_ + 1);
         ptr_[index] = value;
     }
@@ -156,9 +181,29 @@ bool DynamicArray<T>::operator>=(const DynamicArray &other) const {
     return (*this > other || *this == other);
 }
 
+template<typename T>
+void DynamicArray<T>::MergeSort(DynamicArray<T>& origin, bool (*comp)(const T&, const T&)) {
+    if (origin.GetSize() > 1) {
+        DynamicArray<T> arr1(origin.begin(), origin.begin() + origin.GetSize() / 2);
+        MergeSort(arr1, comp);
+        DynamicArray<T> arr2(origin.begin() + origin.GetSize() / 2, origin.end());
+        MergeSort(arr2, comp);
+        Merge(origin, arr1, arr2, comp);
+    }
+}
+
+template<typename T>
+void DynamicArray<T>::QuickSort(DynamicArray<T>& origin, int start, int end, bool (*comp)(const T&, const T&)) {
+    if (start >= end) {
+        return;
+    }
+    int pivot = Hoare(origin, start, end, comp);
+    QuickSort(origin, start, pivot - 1, comp);
+    QuickSort(origin, pivot + 1, end, comp);
+}
+
 //////////
 
-// TODO убрать из структуры
 template<typename T>
 void DynamicArray<T>::Print(std::ostream &buff) const {
     for (size_t i = 0; i < size_; i++) {

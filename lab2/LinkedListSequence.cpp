@@ -116,6 +116,7 @@ Sequence<T>* LinkedListSequence<T>::Concat(Sequence<T>* other) {
     return res;
 }
 
+
 template<typename T>
 void LinkedListSequence<T>::Print(std::ostream& buff) const {
     object->Print(std::cout);

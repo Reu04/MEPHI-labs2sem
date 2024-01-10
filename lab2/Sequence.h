@@ -21,5 +21,7 @@ public:
     virtual void InsertAt(T item, int index) = 0;
     virtual Sequence<T>* Concat(Sequence<T>* other) = 0;
 
+    //virtual void Sort(Sequence<T>* seq, bool (*comp)(const T&, const T&)) = 0;
+
     virtual void Print(std::ostream& buff) const = 0;
 };
