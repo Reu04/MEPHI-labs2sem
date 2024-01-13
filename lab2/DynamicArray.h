@@ -4,6 +4,7 @@
 #include <string>
 #include <cassert>
 #include <vector>
+#include <chrono>
 
 template<typename T>
 class DynamicArray {
@@ -199,8 +200,10 @@ public:
     bool operator >=(const DynamicArray& other) const;
 
     void MergeSort(DynamicArray<T>& origin, bool (*comp)(const T&, const T&));
+    void MeasureMergeSortTime(DynamicArray<T>& arr, bool (*comp)(const T&, const T&));
 
     void QuickSort(DynamicArray<T>& origin, int start, int end, bool (*comp)(const T&, const T&));
+    void MeasureQuickSortTime(DynamicArray<T>& arr, bool (*comp)(const T&, const T&));
 
     void Print(std::ostream& buff) const;
 

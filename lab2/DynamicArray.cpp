@@ -193,6 +193,17 @@ void DynamicArray<T>::MergeSort(DynamicArray<T>& origin, bool (*comp)(const T&, 
 }
 
 template<typename T>
+void DynamicArray<T>::MeasureMergeSortTime(DynamicArray<T>& arr, bool (*comp)(const T&, const T&)) {
+    auto start_time = std::chrono::high_resolution_clock::now();
+
+    MergeSort(arr, comp);
+
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::chrono::nanoseconds duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time);
+    std::cout << "MergeSort took " << duration.count() << " nanoseconds\n";
+}
+
+template<typename T>
 void DynamicArray<T>::QuickSort(DynamicArray<T>& origin, int start, int end, bool (*comp)(const T&, const T&)) {
     if (start >= end) {
         return;
@@ -200,6 +211,17 @@ void DynamicArray<T>::QuickSort(DynamicArray<T>& origin, int start, int end, boo
     int pivot = Hoare(origin, start, end, comp);
     QuickSort(origin, start, pivot - 1, comp);
     QuickSort(origin, pivot + 1, end, comp);
+}
+
+template<typename T>
+void DynamicArray<T>::MeasureQuickSortTime(DynamicArray<T>& arr, bool (*comp)(const T&, const T&)) {
+    auto start_time = std::chrono::high_resolution_clock::now();
+
+    QuickSort(arr, 0, arr.GetSize() - 1, comp);
+
+    auto end_time = std::chrono::high_resolution_clock::now();
+    std::chrono::nanoseconds duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time);
+    std::cout << "QuickSort took " << duration.count() << " nanoseconds\n";
 }
 
 //////////

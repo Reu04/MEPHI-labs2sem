@@ -2,6 +2,8 @@
 #include "LinkedList.h"
 #include "Deque.h"
 
+#include <limits>
+
 template<typename T>
 DynamicArray<T>* ObjectCreatingDynamicArray() {
     std::cout << "Enter the number of items:\n";
@@ -13,11 +15,27 @@ DynamicArray<T>* ObjectCreatingDynamicArray() {
 
     T* items = new T[num];
 
-    std::cout << "Enter the items:\n";
-    for (size_t i = 0; i < num; i++) {
-        T item;
-        std::cin >> item;
-        items[i] = item;
+    std::cout << "If you want to enter the data yourself - enter 1,\nIf you want to use a random number generator - enter 2\n";
+    std::string choice;
+    std::cin >> choice;
+if (choice == "1") {
+        std::cout << "Enter the items:\n";
+        for (size_t i = 0; i < num; i++) {
+            T item;
+            std::cin >> item;
+            items[i] = item;
+        }
+    } else if (choice == "2") {
+        std::cout << "Enter the range of random numbers:\n";\
+        T start, end;
+        std::cin >> start >> end;
+
+        for (size_t i = 0; i < num; i++) {
+            T randomNumber = static_cast<T>(rand() % static_cast<int>(end - start + 1) + static_cast<int>(start));
+            items[i] = randomNumber;
+        }
+    } else {
+        throw std::invalid_argument("Wrong choice.");
     }
 
     DynamicArray<T>* arr = new DynamicArray<T>(items, num);
@@ -96,19 +114,24 @@ void ObjectDeletion(T object) {
 template<typename T>
 void UIBase() {
     std::cout << "Enter the type of collection which you want to create:\n1. DynamicArray\n2. LinkedList\n3. Deque\n";
-    int type;
+    std::string type;
     std::cin >> type;
-    if (type == 1) {
+    if (type == "1") {
         DynamicArray<T>* arr = ObjectCreatingDynamicArray<T>();
 
         std::cout << "If you want to continue: enter 0.\n";
-        int exit;
+        std::string exit;
         std::cin >> exit;
 
-        while (exit == 0) {
-            std::cout << "Which function do you want to use?\n1. Get\n2. GetSize\n3. Resize\n4. Set\n";
+        while (exit == "0") {
+            std::cout << "Which function do you want to use?\n1. Get\n2. GetSize\n3. Resize\n4. Set\n5. MergeSort\n6. QuickSort\n7. MeasureMergeSortTime\n8. MeasureQuickSortTime\n";
             int func;
-            std::cin >> func;
+
+            while (!(std::cin >> func)) {
+                std::cin.clear(); // Очищаем флаг ошибки
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Очищаем буфер ввода
+                std::cout << "Invalid input. Please enter a number: ";
+            }
             switch (func) {
                 case 1:
                     std::cout << "Enter the index:\n";
@@ -138,6 +161,30 @@ void UIBase() {
                     arr->Print(std::cout);
                     std::cout << "Set.\n";
                     break;
+                case 5:
+                    arr->MergeSort(*arr, [](const T& a, const T& b) {
+                        return a < b;
+                    });
+                    std::cout << "Sorted.\n";
+                    arr->Print(std::cout);
+                    break;
+                case 6:
+                    arr->QuickSort(*arr, 0, arr->GetSize() - 1, [](const T& a, const T& b) {
+                        return a < b;
+                    });
+                    std::cout << "Sorted.\n";
+                    arr->Print(std::cout);
+                    break;
+                case 7:
+                    arr->MeasureMergeSortTime(*arr, [](const T& a, const T& b) {
+                        return a < b;
+                    });
+                    break;
+                case 8:
+                    arr->MeasureQuickSortTime(*arr, [](const T& a, const T& b) {
+                        return a < b;
+                    });
+                    break;
                 default:
                     std::cout << "Wrong function.\n";
                     break;
@@ -146,7 +193,7 @@ void UIBase() {
             std::cin >> exit;
         }
         ObjectDeletion(arr);
-    } else if (type == 2) {
+    } else if (type == "2") {
         LinkedList<T>* list = ObjectCreatingLinkedList<T>();
 
         std::cout << "If you want to continue: enter 0.\n";
@@ -223,7 +270,7 @@ void UIBase() {
             std::cin >> exit;
         }
         ObjectDeletion(list);
-    } else if (type == 3) {
+    } else if (type == "3") {
         Deque<T>* deque = ObjectCreatingDeque<T>();
 
         std::cout << "If you want to continue: enter 0.\n";
@@ -328,7 +375,7 @@ void UIBase() {
 }
 
 void UIforBaseCollections() {
-    std::cout << "What type of elements will be in your collection?\n1. int\n2. double\n3. char\n";
+    std::cout << "What type of elements will be in your collection?\n1. int\n2. char\n";
     int type;
     std::cin >> type;
     switch (type) {
@@ -336,9 +383,6 @@ void UIforBaseCollections() {
             UIBase<int>();
             break;
         case 2:
-            UIBase<double>();
-            break;
-        case 3:
             UIBase<char>();
             break;
         default:
