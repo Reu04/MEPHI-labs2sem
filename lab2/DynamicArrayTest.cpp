@@ -79,16 +79,16 @@ void TestDynamicArray() {
     }
 
     // MergeSort:
-    Object1.MergeSort(Object1, &BasicComparatorForInt);
-    Object4.MergeSort(Object4, &ReverseComparatorForInt);
+    Object1.MergeSort(&BasicComparatorForInt);
+    Object4.MergeSort(&ReverseComparatorForInt);
 
     std::cout << "\nData after MergeSort:\n";
     Object1.Print(std::cout);
     Object4.Print(std::cout);
 
     // QuickSort:
-    Object1.QuickSort(Object1, 0, Object1.GetSize() - 1, &ReverseComparatorForInt);
-    Object4.QuickSort(Object4, 0, Object4.GetSize() - 1, &BasicComparatorForInt);
+    Object1.QuickSort(0, Object1.GetSize() - 1, &ReverseComparatorForInt);
+    Object4.QuickSort(0, Object4.GetSize() - 1, &BasicComparatorForInt);
 
     std::cout << "\nData after QuickSort:\n";
     Object1.Print(std::cout);

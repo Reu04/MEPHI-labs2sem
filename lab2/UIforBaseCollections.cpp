@@ -158,14 +158,14 @@ void UIBase() {
                     std::cout << "Set.\n";
                     break;
                 case 5:
-                    arr->MergeSort(*arr, [](const T& a, const T& b) {
+                    arr->MergeSort([](const T& a, const T& b) {
                         return a < b;
                     });
                     std::cout << "Sorted.\n";
                     arr->Print(std::cout);
                     break;
                 case 6:
-                    arr->QuickSort(*arr, 0, arr->GetSize() - 1, [](const T& a, const T& b) {
+                    arr->QuickSort(0, arr->GetSize() - 1, [](const T& a, const T& b) {
                         return a < b;
                     });
                     std::cout << "Sorted.\n";

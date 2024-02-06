@@ -182,13 +182,13 @@ bool DynamicArray<T>::operator>=(const DynamicArray &other) const {
 }
 
 template<typename T>
-void DynamicArray<T>::MergeSort(DynamicArray<T>& origin, bool (*comp)(const T&, const T&)) {
-    if (origin.GetSize() > 1) {
-        DynamicArray<T> arr1(origin.begin(), origin.begin() + origin.GetSize() / 2);
-        MergeSort(arr1, comp);
-        DynamicArray<T> arr2(origin.begin() + origin.GetSize() / 2, origin.end());
-        MergeSort(arr2, comp);
-        Merge(origin, arr1, arr2, comp);
+void DynamicArray<T>::MergeSort(bool (*comp)(const T&, const T&)) {
+    if (GetSize() > 1) {
+        DynamicArray<T> arr1(begin(), begin() + GetSize() / 2);
+        arr1.MergeSort(comp);
+        DynamicArray<T> arr2(begin() + GetSize() / 2, end());
+        arr2.MergeSort(comp);
+        Merge(*this, arr1, arr2, comp);
     }
 }
 
@@ -196,7 +196,7 @@ template<typename T>
 void DynamicArray<T>::MeasureMergeSortTime(DynamicArray<T>& arr, bool (*comp)(const T&, const T&)) {
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    MergeSort(arr, comp);
+    arr.MergeSort(comp);
 
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::nanoseconds duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time);
@@ -204,20 +204,20 @@ void DynamicArray<T>::MeasureMergeSortTime(DynamicArray<T>& arr, bool (*comp)(co
 }
 
 template<typename T>
-void DynamicArray<T>::QuickSort(DynamicArray<T>& origin, int start, int end, bool (*comp)(const T&, const T&)) {
+void DynamicArray<T>::QuickSort(int start, int end, bool (*comp)(const T&, const T&)) {
     if (start >= end) {
         return;
     }
-    int pivot = Hoare(origin, start, end, comp);
-    QuickSort(origin, start, pivot - 1, comp);
-    QuickSort(origin, pivot + 1, end, comp);
+    int pivot = Hoare(*this, start, end, comp);
+    QuickSort(start, pivot - 1, comp);
+    QuickSort(pivot + 1, end, comp);
 }
 
 template<typename T>
 void DynamicArray<T>::MeasureQuickSortTime(DynamicArray<T>& arr, bool (*comp)(const T&, const T&)) {
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    QuickSort(arr, 0, arr.GetSize() - 1, comp);
+    arr.QuickSort(0, arr.GetSize() - 1, comp);
 
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::nanoseconds duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time);
